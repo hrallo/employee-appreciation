@@ -24,7 +24,7 @@ export default function RootLayout({
           'md:min-h-screen flex flex-col justify-between',
         ].join(' ')}
       >
-        <Header email="meow@meow.com" phone={'111-111-2222'} />
+        <Header email="shelly@shopcorporateID.com" phone={'636-227-1200'} />
         {children}
       </body>
     </html>

@@ -19,7 +19,6 @@ const EmailConfirmation: FC<EmailConfirmationProps> = ({
   }
 
   return (
-    // fixed inset-x-0 bottom-0
     <div
       id="emailConfirmation"
       className="p-6 w-full md:fixed md:inset-x-0 md:bottom-0  bg-alabaster sm:flex items-center justify-end"

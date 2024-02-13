@@ -152,8 +152,11 @@ const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
 
         {heading('Order Received', 'text-center')}
         <p className="text-sm md:text-base mb-4 text-center">
-          Your item will be shipped soon. If you have any questions please email
-          blank@blank.com.
+          Your item will be shipped soon. If you have any questions please email{' '}
+          <a href={`mailto:shelly@shopcorporateID.com`} className="underline">
+            shelly@shopcorporateID.com
+          </a>
+          .
         </p>
         <p className="text-sm md:text-base mb-10 text-center">
           We can’t wait to have a great 2024!
