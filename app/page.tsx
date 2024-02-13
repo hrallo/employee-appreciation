@@ -1,4 +1,3 @@
-import ProductButton from '@/components/ProductButton'
 import ProductLinks from '@/components/ProductLinks'
 import Image from 'next/image'
 
@@ -20,8 +19,8 @@ export default async function Home() {
   const products = await getProducts()
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between py-12 px-6 md:px-12">
-      <header className="text-center">
+    <main className="flex-1 flex flex-col">
+      <div className="text-center py-12 px-6 md:px-12">
         <div className="flex justify-center">
           <Image
             className="mb-12"
@@ -38,7 +37,7 @@ export default async function Home() {
           an item and we will ship it shortly.
         </p>
         <p className="text-base md:text-2xl font-bold">You Are Appreciated!</p>
-      </header>
+      </div>
       <ProductLinks products={products} />
     </main>
   )

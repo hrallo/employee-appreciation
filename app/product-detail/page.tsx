@@ -1,3 +1,4 @@
+import Header from '@/components/Header'
 import ProductImages from './components/ProductImages'
 import ProductError from './components/error'
 import Form from './components/form.tsx/form'
@@ -13,7 +14,7 @@ async function getProduct(
   const res = await fetch(
     `${process.env.WORDPRESS_URL}/product/${id}?acf_format=standard`,
     {
-      next: { tags: [`product-${id}`] },
+      next: { tags: [`product-${id}`], revalidate: 1 },
     }
   )
 
@@ -57,8 +58,8 @@ export default async function ProductDetail({
   }
 
   return (
-    <main className="grid grid-cols-1 md:grid-cols-2 md:h-screen">
-      <div className="p-3">
+    <main className="grid grid-cols-1 md:grid-cols-2 flex-1 md:h-screen">
+      <div className="p-3 md:pt-12">
         <ProductImages
           featured={product.acf.featured_image}
           supportingImage1={product.acf.supporting_image_1}

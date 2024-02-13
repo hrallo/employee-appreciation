@@ -73,7 +73,7 @@ const ProductImages: FC<ProductImagesProps> = ({
       <button
         onClick={() => updateSelectedImage(image)}
         className={[
-          'border hover:border-navy p-1',
+          'border hover:border-navy p-1 flex items-center justify-center',
           isSelected(image.id) ? 'border-navy-100' : '',
         ].join(' ')}
       >
@@ -89,6 +89,9 @@ const ProductImages: FC<ProductImagesProps> = ({
     type: 'full' | 'thumbnail' = 'full'
   ) => displayImage(type, imageMap[imageNum].image)
 
+  const showThumbnails =
+    !!supportingImage1 || !!supportingImage2 || !!supportingImage3
+
   return (
     <>
       <div>
@@ -99,14 +102,18 @@ const ProductImages: FC<ProductImagesProps> = ({
         >
           Back
         </Button>
-        <div className="py-12 px-6 md:px-12">
-          {displayImage('full', selectedImage)}
-          <div className="grid grid-cols-4 gap-4">
-            {displayImageByNum(0, 'thumbnail')}
-            {displayImageByNum(1, 'thumbnail')}
-            {displayImageByNum(2, 'thumbnail')}
-            {displayImageByNum(3, 'thumbnail')}
+        <div className="px-6 md:p-12">
+          <div className="flex justify-center max-w-48 mx-auto md:max-w-[initial]">
+            {displayImage('full', selectedImage)}
           </div>
+          {showThumbnails && (
+            <div className="grid grid-cols-4 gap-4 mx-auto max-w-[320px]">
+              {displayImageByNum(0, 'thumbnail')}
+              {displayImageByNum(1, 'thumbnail')}
+              {displayImageByNum(2, 'thumbnail')}
+              {displayImageByNum(3, 'thumbnail')}
+            </div>
+          )}
         </div>
       </div>
     </>

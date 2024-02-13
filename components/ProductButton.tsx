@@ -25,7 +25,7 @@ const ProductButton: FC<ProductButtonProps> = ({
     <div className="relative flex">
       <button
         className={[
-          'flex-1 bg-white border-2 rounded flex flex-col justify-between p-4 transition duration-300',
+          'flex-1 bg-white border-2 rounded flex flex-col items-center justify-between p-4 transition duration-300',
           selected
             ? 'border-2 border-navy'
             : 'border-transparent hover:border-navy/30',
