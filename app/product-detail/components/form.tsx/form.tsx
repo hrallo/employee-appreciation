@@ -146,10 +146,8 @@ const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
   if (orderPlaced)
     return wrapper(
       <>
-        <div className="flex items-center justify-center mb-10">
-          <div className="flex items-center justify-center rounded-full bg-green-700 text-white text-[80px] p-10">
-            <span className="material-symbols-outlined">verified</span>
-          </div>
+        <div className="flex items-center justify-center my-10 text-green-700 text-[80px]">
+          <span className="material-symbols-outlined">verified</span>
         </div>
 
         {heading('Order Received', 'text-center')}
