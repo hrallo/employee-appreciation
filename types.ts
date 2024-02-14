@@ -22,6 +22,7 @@ interface Product extends Post {
   acf: {
     description?: string
     sizes?: string
+    size_guide?: WP_Image
     colors?: string
     featured_image?: WP_Image
     supporting_image_1?: WP_Image
@@ -38,5 +39,27 @@ interface Address extends Post {
     city: string
     state: string
     zipcode: string
+  }
+}
+
+interface Content extends Post {
+  acf: {
+    home: {
+      home_image?: WP_Image
+      home_heading?: string
+      home_description?: string
+      home_tagline?: string
+    }
+    global: {
+      contact_phone?: string
+      contact_email?: string
+      verification_email_placeholder?: string
+      logo?: WP_Image
+    }
+    order_details: {
+      order_confirmation_heading?: string
+      order_success_heading?: string
+      order_success_description?: string
+    }
   }
 }

@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import './icons.css'
 import './globals.css'
-import Header from '@/components/Header'
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 
@@ -24,7 +23,6 @@ export default function RootLayout({
           'md:min-h-screen flex flex-col justify-between',
         ].join(' ')}
       >
-        <Header email="shelly@shopcorporateID.com" phone={'636-227-1200'} />
         {children}
       </body>
     </html>

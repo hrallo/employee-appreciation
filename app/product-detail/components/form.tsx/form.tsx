@@ -9,9 +9,10 @@ import { find } from 'lodash'
 type FormProps = {
   product: Product
   locations: Address[]
+  content?: Content['acf']['order_details']
 }
 
-const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
+const Form: FC<FormProps> = ({ product, locations, content }): ReactElement => {
   const optionsToArray = (options?: string) => {
     if (!options) return
     return options.split(',').map(opt => opt.trim())
@@ -35,6 +36,7 @@ const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
     state: '',
     zipcode: '',
   })
+  const [name, setName] = useState<string>()
   const [selectedAddress, setSelectedAddress] = useState<Address['id']>(
     locations[0].id
   )
@@ -55,6 +57,7 @@ const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
   )
 
   const selectedAddressDetails = find(locations, { id: selectedAddress })
+  const showSizeWrapper = (sizes && sizes.length > 0) || product.acf.size_guide
 
   if (showConfirmOrder)
     return wrapper(
@@ -105,6 +108,11 @@ const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
           )}
         </div>
 
+        <div className="mb-10">
+          <div className="font-semibold ">For:</div>
+          {isRemote ? <div>{address.name}</div> : <div>{name}</div>}
+        </div>
+
         <div className="flex justify-end items-center space-x-2">
           <Button
             onClick={() => {
@@ -150,17 +158,16 @@ const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
           <span className="material-symbols-outlined">verified</span>
         </div>
 
-        {heading('Order Received', 'text-center')}
-        <p className="text-sm md:text-base mb-4 text-center">
-          Your item will be shipped soon. If you have any questions please email{' '}
-          <a href={`mailto:shelly@shopcorporateID.com`} className="underline">
-            shelly@shopcorporateID.com
-          </a>
-          .
-        </p>
-        <p className="text-sm md:text-base mb-10 text-center">
-          We can’t wait to have a great 2024!
-        </p>
+        {content?.order_success_heading &&
+          heading(content.order_success_heading, 'text-center')}
+        {content?.order_success_description && (
+          <p
+            className="text-sm md:text-base mb-4 text-center"
+            dangerouslySetInnerHTML={{
+              __html: content?.order_success_description,
+            }}
+          ></p>
+        )}
       </>
     )
 
@@ -168,18 +175,31 @@ const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
     <>
       {heading(getProductTitle(product))}
       <p className="text-sm md:text-base mb-10">{product.acf.description}</p>
-      {sizes && sizes?.length > 0 && (
-        <RadioGroup
-          label="Select your size:"
-          name="Size"
-          choices={sizes.map(opt => {
-            return { label: opt, value: opt }
-          })}
-          value={selectedSize}
-          onSetValue={setSelectedSize}
-          className="mb-10"
-        />
+      {showSizeWrapper && (
+        <div className="mb-10">
+          <>
+            {sizes && sizes?.length > 0 && (
+              <RadioGroup
+                label="Select your size:"
+                name="Size"
+                choices={sizes.map(opt => {
+                  return { label: opt, value: opt }
+                })}
+                value={selectedSize}
+                onSetValue={setSelectedSize}
+              />
+            )}
+            {product.acf.size_guide && (
+              <img
+                src={product.acf.size_guide.sizes.large}
+                alt={product.acf.size_guide.alt}
+                className="mt-4"
+              />
+            )}
+          </>
+        </div>
       )}
+
       {colors && colors?.length > 0 && (
         <RadioGroup
           label="Select your color:"
@@ -211,7 +231,10 @@ const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
             label="Name"
             name="Name"
             value={address.name}
-            onSetValue={val => setAddress({ ...address, name: val })}
+            onSetValue={val => {
+              setAddress({ ...address, name: val })
+              setName(val)
+            }}
           />
           <Input
             className="mb-4"
@@ -252,34 +275,46 @@ const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
           </div>
         </>
       ) : (
-        <RadioGroup
-          label="Select your office location"
-          name="Office Location"
-          choices={locations.map(location => {
-            return {
-              label: (
-                <div className="text-sm relative -top-1 pb-3">
-                  <div className="font-semibold">
-                    {location.acf.address_name}
+        <>
+          <RadioGroup
+            label="Select your office location"
+            name="Office Location"
+            choices={locations.map(location => {
+              return {
+                label: (
+                  <div className="text-sm relative -top-1 pb-3">
+                    <div className="font-semibold">
+                      {location.acf.address_name}
+                    </div>
+                    <div>{location.acf.address_line_1}</div>
+                    {location.acf.address_line_2 && (
+                      <div>{location.acf.address_line_2}</div>
+                    )}
+                    <div>
+                      {location.acf.city} {location.acf.state},{' '}
+                      {location.acf.zipcode}
+                    </div>
                   </div>
-                  <div>{location.acf.address_line_1}</div>
-                  {location.acf.address_line_2 && (
-                    <div>{location.acf.address_line_2}</div>
-                  )}
-                  <div>
-                    {location.acf.city} {location.acf.state},{' '}
-                    {location.acf.zipcode}
-                  </div>
-                </div>
-              ),
-              value: location.id.toString(),
-            }
-          })}
-          value={selectedAddress.toString()}
-          onSetValue={val => setSelectedAddress(parseInt(val))}
-          displayAsButtons={false}
-          className="mb-10"
-        />
+                ),
+                value: location.id.toString(),
+              }
+            })}
+            value={selectedAddress.toString()}
+            onSetValue={val => setSelectedAddress(parseInt(val))}
+            displayAsButtons={false}
+            className="mb-4"
+          />
+          <Input
+            className="mb-10"
+            label="Name"
+            name="Name"
+            value={address.name}
+            onSetValue={val => {
+              setAddress({ ...address, name: val })
+              setName(val)
+            }}
+          />
+        </>
       )}
 
       <div className="flex justify-end">
@@ -287,11 +322,12 @@ const Form: FC<FormProps> = ({ product, locations }): ReactElement => {
           onClick={() => confirmOrder()}
           disabled={
             isRemote
-              ? !address.line1 ||
+              ? !address.name ||
+                !address.line1 ||
                 !address.zipcode ||
                 !address.city ||
                 !address.state
-              : !selectedAddress
+              : !selectedAddress || !name
           }
         >
           Continue

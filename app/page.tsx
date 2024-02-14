@@ -1,44 +1,54 @@
+import Header from '@/components/Header'
 import ProductLinks from '@/components/ProductLinks'
 import Image from 'next/image'
-
-async function getProducts(): Promise<Product[]> {
-  const res = await fetch(
-    `${process.env.WORDPRESS_URL}/product?per_page=12&acf_format=standard`,
-    { next: { tags: ['products'] } }
-  )
-
-  if (!res.ok) {
-    console.warn('Failed to fetch products')
-    return []
-  }
-
-  return res.json()
-}
+import { getProducts, getSiteContent } from './wordpress'
 
 export default async function Home() {
+  const { content } = await getSiteContent()
   const products = await getProducts()
 
+  const homeContent = content?.acf.home
+
   return (
-    <main className="flex-1 flex flex-col">
-      <div className="text-center py-12 px-6 md:px-12">
-        <div className="flex justify-center">
-          <Image
-            className="mb-12"
-            src="/logo.svg"
-            alt="Hussman Logo"
-            width={600}
-            height={58}
-            priority
-          />
+    <>
+      <Header
+        email={content?.acf.global.contact_email}
+        phone={content?.acf.global.contact_phone}
+        logo={content?.acf.global.logo}
+      />
+      <main className="flex-1 flex flex-col">
+        <div className="md:flex py-12 px-6 md:px-12 md:justify-center md:items-center">
+          {!!homeContent?.home_image && (
+            <div className="flex justify-center mb-12 md:mb-0 md:mr-12">
+              <img
+                src={homeContent?.home_image.sizes.large}
+                alt={homeContent?.home_image.alt ?? ''}
+              />
+            </div>
+          )}
+          <div className="text-center md:text-left">
+            {homeContent?.home_heading && (
+              <h1 className="text-2xl md:text-3xl mb-5">
+                {homeContent.home_heading}
+              </h1>
+            )}
+            {homeContent?.home_description && (
+              <p
+                className="text-base md:text-xl mb-10 max-w-[600px]"
+                dangerouslySetInnerHTML={{
+                  __html: homeContent.home_description,
+                }}
+              ></p>
+            )}
+            {homeContent?.home_tagline && (
+              <p className="text-base md:text-xl font-bold">
+                {homeContent.home_tagline}
+              </p>
+            )}
+          </div>
         </div>
-        <h1 className="text-3xl md:text-4xl mb-5">Employee Appreciation</h1>
-        <p className="text-base md:text-2xl mb-10 max-w-[600px] mx-auto">
-          {new Date().getFullYear()} Raffle Selections are here. Please select
-          an item and we will ship it shortly.
-        </p>
-        <p className="text-base md:text-2xl font-bold">You Are Appreciated!</p>
-      </div>
-      <ProductLinks products={products} />
-    </main>
+        <ProductLinks products={products} />
+      </main>
+    </>
   )
 }

@@ -21,7 +21,7 @@ const EmailConfirmation: FC<EmailConfirmationProps> = ({
   return (
     <div
       id="emailConfirmation"
-      className="p-6 w-full md:fixed md:inset-x-0 md:bottom-0  bg-alabaster sm:flex items-center justify-end"
+      className="p-6 w-full  bg-alabaster sm:flex items-center justify-end"
     >
       <h2 className=" text-navy sm:text-center text-lg md:text-xl font-semibold mb-6 sm:mb-0 sm:mr-3">
         Verify Company Email
