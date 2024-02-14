@@ -3,9 +3,12 @@ import { FC, ReactElement, useState } from 'react'
 import ProductButton from './ProductButton'
 import EmailConfirmation from './EmailConfirmation'
 
-type ProductLinksProps = { products: Product[] }
+type ProductLinksProps = { products: Product[]; emailPlaceholder?: string }
 
-const ProductLinks: FC<ProductLinksProps> = ({ products }): ReactElement => {
+const ProductLinks: FC<ProductLinksProps> = ({
+  products,
+  emailPlaceholder,
+}): ReactElement => {
   const [selectedProduct, setSelectedProduct] = useState<Product>()
 
   const scrollToHash = function (elId: string) {
@@ -36,7 +39,12 @@ const ProductLinks: FC<ProductLinksProps> = ({ products }): ReactElement => {
           ))}
         </div>
       </div>
-      {selectedProduct && <EmailConfirmation product={selectedProduct} />}
+      {selectedProduct && (
+        <EmailConfirmation
+          product={selectedProduct}
+          placeholder={emailPlaceholder}
+        />
+      )}
     </>
   )
 }

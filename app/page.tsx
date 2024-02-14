@@ -47,7 +47,10 @@ export default async function Home() {
             )}
           </div>
         </div>
-        <ProductLinks products={products} />
+        <ProductLinks
+          products={products}
+          emailPlaceholder={content?.acf.global.verification_email_placeholder}
+        />
       </main>
     </>
   )

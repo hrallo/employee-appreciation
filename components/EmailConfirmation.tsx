@@ -6,10 +6,12 @@ import { useRouter } from 'next/navigation'
 
 type EmailConfirmationProps = {
   product: Product
+  placeholder?: string
 }
 
 const EmailConfirmation: FC<EmailConfirmationProps> = ({
   product,
+  placeholder,
 }): ReactElement => {
   const [email, setEmail] = useState<string>('')
   const router = useRouter()
@@ -32,7 +34,7 @@ const EmailConfirmation: FC<EmailConfirmationProps> = ({
           label="Email"
           value={email}
           onSetValue={setEmail}
-          placeholder="email@hussman.com"
+          placeholder={placeholder}
           className="mb-6 sm:mb-0 flex-1 w-full sm:w-auto sm:mr-4 sm:max-w-80"
         />
         <Button
