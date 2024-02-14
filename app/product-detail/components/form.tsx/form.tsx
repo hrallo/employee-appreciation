@@ -260,7 +260,7 @@ const Form: FC<FormProps> = ({ product, locations, content }): ReactElement => {
             />
             <Input
               className="flex-1 mb-3"
-              label="State"
+              label="State / Province"
               name="State"
               value={address.state}
               onSetValue={val => setAddress({ ...address, state: val })}
