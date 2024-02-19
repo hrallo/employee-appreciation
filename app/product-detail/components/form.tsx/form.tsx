@@ -270,7 +270,7 @@ const Form: FC<FormProps> = ({
         />
       )}
       <RadioGroup
-        label="Are you a remote employee?"
+        label="Are you a remote employee or work at a location not listed below?"
         name="Location"
         choices={['No', 'Yes'].map(opt => {
           return { label: opt, value: opt }
