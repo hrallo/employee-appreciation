@@ -10,9 +10,15 @@ type FormProps = {
   product: Product
   locations: Address[]
   content?: Content['acf']['order_details']
+  email: string
 }
 
-const Form: FC<FormProps> = ({ product, locations, content }): ReactElement => {
+const Form: FC<FormProps> = ({
+  product,
+  locations,
+  content,
+  email,
+}): ReactElement => {
   const optionsToArray = (options?: string) => {
     if (!options) return
     return options.split(',').map(opt => opt.trim())
@@ -43,8 +49,7 @@ const Form: FC<FormProps> = ({ product, locations, content }): ReactElement => {
   const [orderPlaced, setOrderPlaced] = useState<boolean>()
   const [showConfirmOrder, setShowConfirmOrder] = useState<boolean>()
 
-  const confirmOrder = () => {
-    // TODO: place order
+  const confirmOrder = async () => {
     setShowConfirmOrder(true)
   }
 
@@ -58,6 +63,59 @@ const Form: FC<FormProps> = ({ product, locations, content }): ReactElement => {
 
   const selectedAddressDetails = find(locations, { id: selectedAddress })
   const showSizeWrapper = (sizes && sizes.length > 0) || product.acf.size_guide
+  const [error, setError] = useState<boolean>()
+
+  const placeOrder = async () => {
+    try {
+      await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          receiverName: name,
+          receiverEmail: email,
+          product: product.title.rendered,
+          size: selectedSize,
+          color: selectedColor,
+          isRemote: isRemote,
+          shippingAddress: {
+            attn: isRemote ? undefined : selectedAddressDetails?.acf.attention,
+            addressName: isRemote
+              ? address.name
+              : selectedAddressDetails?.acf.address_name,
+            addressLine1: isRemote
+              ? address.line1
+              : selectedAddressDetails?.acf.address_line_1,
+            addressLine2: isRemote
+              ? address.line2
+              : selectedAddressDetails?.acf.address_line_2,
+            city: isRemote ? address.city : selectedAddressDetails?.acf.city,
+            stateOrProvince: isRemote
+              ? address.state
+              : selectedAddressDetails?.acf.state,
+            zipcode: isRemote
+              ? address.zipcode
+              : selectedAddressDetails?.acf.zipcode,
+          },
+        }),
+      })
+      setOrderPlaced(true)
+      setShowConfirmOrder(false)
+    } catch (err) {
+      setError(true)
+    }
+  }
+
+  if (error)
+    return wrapper(
+      <>
+        {heading('Oops! Something went wrong.')}
+        <p className="text-sm md:text-base mb-10">
+          We were unable to place your order. Please try again later.
+        </p>
+      </>
+    )
 
   if (showConfirmOrder)
     return wrapper(
@@ -133,8 +191,7 @@ const Form: FC<FormProps> = ({ product, locations, content }): ReactElement => {
           </Button>
           <Button
             onClick={() => {
-              setOrderPlaced(true)
-              setShowConfirmOrder(false)
+              placeOrder()
             }}
             disabled={
               isRemote

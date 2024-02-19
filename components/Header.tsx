@@ -16,14 +16,16 @@ const Header: FC<HeaderProps> = ({ logo, email, phone }): ReactElement => {
       )}
     >
       {!!logo?.url && (
-        <Image
-          className="mr-4 m-1"
-          src={logo.url}
-          alt={logo.alt || 'Logo'}
-          width={200}
-          height={20}
-          priority
-        />
+        <a href="/">
+          <Image
+            className="mr-4 m-1"
+            src={logo.url}
+            alt={logo.alt || 'Logo'}
+            width={200}
+            height={20}
+            priority
+          />
+        </a>
       )}
       <div className="flex text-xs items-center text-white m-1">
         <div className="font-semibold text-gray-100 uppercase hidden md:block pr-2">

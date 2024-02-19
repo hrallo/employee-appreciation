@@ -3,7 +3,10 @@ import { FC, ReactElement, useState } from 'react'
 import ProductButton from './ProductButton'
 import EmailConfirmation from './EmailConfirmation'
 
-type ProductLinksProps = { products: Product[]; emailPlaceholder?: string }
+type ProductLinksProps = {
+  products: Product[]
+  emailPlaceholder?: string
+}
 
 const ProductLinks: FC<ProductLinksProps> = ({
   products,

@@ -39,6 +39,7 @@ interface Address extends Post {
     city: string
     state: string
     zipcode: string
+    attention: string
   }
 }
 
@@ -61,5 +62,24 @@ interface Content extends Post {
       order_success_heading?: string
       order_success_description?: string
     }
+  }
+}
+
+interface Order {
+  createdAt: Date
+  product: string
+  receiverName: string
+  receiverEmail: string
+  size?: string
+  color?: string
+  isRemote: boolean
+  shippingAddress: {
+    attn: string
+    addressName: string
+    addressLine1: string
+    addressLine2: string
+    city: string
+    stateOrProvince: string
+    zipcode: string
   }
 }

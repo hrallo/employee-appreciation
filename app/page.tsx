@@ -1,6 +1,5 @@
 import Header from '@/components/Header'
 import ProductLinks from '@/components/ProductLinks'
-import Image from 'next/image'
 import { getProducts, getSiteContent } from './wordpress'
 
 export default async function Home() {

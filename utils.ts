@@ -6,4 +6,4 @@ const decodeHtmlCharCodes = (str: string) =>
 const getProductTitle = (product?: Product) =>
   product?.title.rendered ? decodeHtmlCharCodes(product?.title.rendered) : ''
 
-export { getProductTitle }
+export { getProductTitle, decodeHtmlCharCodes }

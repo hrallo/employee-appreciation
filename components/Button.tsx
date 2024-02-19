@@ -10,6 +10,7 @@ type ButtonProps = {
   iconPosition?: 'left' | 'right'
   disabled?: boolean
   size?: 'sm' | 'lg'
+  type?: 'button' | 'submit'
 }
 
 const Button: FC<ButtonProps> = ({
@@ -21,6 +22,7 @@ const Button: FC<ButtonProps> = ({
   iconPosition = 'right',
   disabled,
   size = 'sm',
+  type = 'button',
 }): ReactElement => {
   const variantClasses = {
     primary: [
@@ -43,6 +45,7 @@ const Button: FC<ButtonProps> = ({
 
   return (
     <button
+      type={type}
       onClick={onClick}
       className={[
         `border-2 rounded-sm flex items-center font-semibold transition justify-center py-2 px-6`,

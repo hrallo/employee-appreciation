@@ -4,7 +4,7 @@ async function getSiteContent(): Promise<{
 }> {
   const res = await fetch(
     `${process.env.WORDPRESS_URL}/pages?slug=site-content-settings&acf_format=standard`,
-    { next: { tags: ['content'], revalidate: 1 } }
+    { next: { tags: ['content'], revalidate: 300 } }
   )
 
   if (!res.ok) {
@@ -22,7 +22,7 @@ async function getSiteContent(): Promise<{
 async function getProducts(): Promise<Product[]> {
   const res = await fetch(
     `${process.env.WORDPRESS_URL}/product?per_page=12&acf_format=standard`,
-    { next: { tags: ['products'] } }
+    { next: { tags: ['products'], revalidate: 300 } }
   )
 
   if (!res.ok) {
@@ -44,7 +44,7 @@ async function getProduct(
   const res = await fetch(
     `${process.env.WORDPRESS_URL}/product/${id}?acf_format=standard`,
     {
-      next: { tags: [`product-${id}`], revalidate: 1 },
+      next: { tags: [`product-${id}`], revalidate: 300 },
     }
   )
 
@@ -64,7 +64,7 @@ async function getLocations(): Promise<{
 }> {
   const res = await fetch(
     `${process.env.WORDPRESS_URL}/location?per_page=12&acf_format=standard`,
-    { next: { tags: ['locations'] } }
+    { next: { tags: ['locations'], revalidate: 300 } }
   )
 
   if (!res.ok) {
