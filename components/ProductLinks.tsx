@@ -6,11 +6,13 @@ import EmailConfirmation from './EmailConfirmation'
 type ProductLinksProps = {
   products: Product[]
   emailPlaceholder?: string
+  shouldVerifyDomain?: boolean
 }
 
 const ProductLinks: FC<ProductLinksProps> = ({
   products,
   emailPlaceholder,
+  shouldVerifyDomain,
 }): ReactElement => {
   const [selectedProduct, setSelectedProduct] = useState<Product>()
 
@@ -46,6 +48,7 @@ const ProductLinks: FC<ProductLinksProps> = ({
         <EmailConfirmation
           product={selectedProduct}
           placeholder={emailPlaceholder}
+          shouldVerifyDomain={shouldVerifyDomain}
         />
       )}
     </>

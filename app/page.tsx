@@ -5,7 +5,7 @@ import { getProducts, getSiteContent } from './wordpress'
 export default async function Home() {
   const { content } = await getSiteContent()
   const products = await getProducts()
-
+  const shouldVerifyDomain = process.env.SHOULD_VERIFY_DOMAIN === 'TRUE'
   const homeContent = content?.acf.home
 
   return (
@@ -49,6 +49,7 @@ export default async function Home() {
         <ProductLinks
           products={products}
           emailPlaceholder={content?.acf.global.verification_email_placeholder}
+          shouldVerifyDomain={shouldVerifyDomain}
         />
       </main>
     </>

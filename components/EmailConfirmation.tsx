@@ -7,11 +7,13 @@ import { useRouter } from 'next/navigation'
 type EmailConfirmationProps = {
   product: Product
   placeholder?: string
+  shouldVerifyDomain?: boolean
 }
 
 const EmailConfirmation: FC<EmailConfirmationProps> = ({
   product,
   placeholder,
+  shouldVerifyDomain,
 }): ReactElement => {
   const [email, setEmail] = useState<string>('')
   const [verifyError, setVerifyError] = useState<string>()
@@ -39,8 +41,11 @@ const EmailConfirmation: FC<EmailConfirmationProps> = ({
 
   const verifyEmail = async () => {
     setVerifyError(undefined)
-    if (!isCompanyEmail())
-      return setVerifyError(`Please provide a valid company email.`)
+
+    if (shouldVerifyDomain) {
+      if (!isCompanyEmail())
+        return setVerifyError(`Please provide a valid company email.`)
+    }
 
     const emailStatus = await getEmailStatus()
 
