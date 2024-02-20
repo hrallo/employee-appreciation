@@ -11,6 +11,7 @@ type RadioGroupProps = {
   onSetValue?: (value: string) => void
   spaceItems?: boolean
   displayAsButtons?: boolean
+  itemsFull?: boolean
 }
 
 const RadioGroup: FC<RadioGroupProps> = ({
@@ -22,6 +23,7 @@ const RadioGroup: FC<RadioGroupProps> = ({
   choices,
   spaceItems = true,
   displayAsButtons = true,
+  itemsFull,
 }): ReactElement => {
   const isChecked = (val: string) => val === value
 
@@ -33,7 +35,11 @@ const RadioGroup: FC<RadioGroupProps> = ({
         {choices.map((choice, idx) => (
           <div
             key={idx}
-            className={['min-w-[30%]', spaceItems ? 'pr-3 pb-3' : ''].join(' ')}
+            className={[
+              'min-w-[30%]',
+              spaceItems ? 'pr-3 pb-3' : '',
+              itemsFull ? 'w-full' : '',
+            ].join(' ')}
           >
             <div
               className={

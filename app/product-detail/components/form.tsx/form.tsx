@@ -336,6 +336,7 @@ const Form: FC<FormProps> = ({
           <RadioGroup
             label="Select your office location"
             name="Office Location"
+            itemsFull={true}
             choices={locations.map(location => {
               return {
                 label: (

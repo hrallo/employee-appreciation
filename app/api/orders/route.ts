@@ -88,9 +88,12 @@ export async function POST(request: Request) {
         ? `<div>${body.shippingAddress.addressLine2}</div>`
         : ''
     }
-    <div>${body.shippingAddress.city}, ${
+    <div style='margin-bottom:20px;'>${body.shippingAddress.city}, ${
     body.shippingAddress.stateOrProvince
-  } ${body.shippingAddress.zipcode}</div>`
+  } ${body.shippingAddress.zipcode}</div>
+  <div><a href="${process.env.SITE_URL}/orders?${
+    process.env.SEARCH_QUERY_NAME
+  }=${process.env.PAGE_PASSWORD}">View Orders<a/></div>`
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM, // sender address
