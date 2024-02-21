@@ -1,5 +1,5 @@
 'use client'
-import { FC, ReactElement, useMemo, useReducer, useState } from 'react'
+import { FC, ReactElement, useEffect, useMemo, useState } from 'react'
 import {
   flexRender,
   getCoreRowModel,
@@ -9,6 +9,9 @@ import {
   getSortedRowModel,
 } from '@tanstack/react-table'
 import { decodeHtmlCharCodes } from '@/utils'
+import Button from '@/components/Button'
+import { useRouter } from 'next/navigation'
+import { revalidateTag } from 'next/cache'
 
 type OrderTableProps = {
   orders: Order[]
@@ -17,6 +20,35 @@ type OrderTableProps = {
 const OrderTable: FC<OrderTableProps> = ({ orders }): ReactElement => {
   const [data] = useState(() => orders)
   const [sorting, setSorting] = useState<SortingState>([])
+  const router = useRouter()
+  const [deleteSuccess, setDeleteSuccess] = useState<boolean>()
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<string>()
+
+  const editOrder = (id: string) => router.push(`/orders/${id}`)
+
+  const deleteOrder = async (id: string) => {
+    setShowDeleteConfirm(undefined)
+    try {
+      const success = await fetch(`/api/orders/id?id=${id}`, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'DELETE',
+      }).then(res => res.json())
+      console.log(success)
+      setDeleteSuccess(true)
+      router.refresh()
+    } catch (err) {
+      setDeleteSuccess(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!deleteSuccess) return
+
+    let timer = setTimeout(() => window?.location?.reload(), 3000)
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [deleteSuccess])
 
   const columns = useMemo<ColumnDef<Order>[]>(
     () => [
@@ -78,6 +110,23 @@ const OrderTable: FC<OrderTableProps> = ({ orders }): ReactElement => {
               <div>Color: {info.row.original.color}</div>
             )}
           </>
+        ),
+      },
+      {
+        accessorKey: 'actions',
+        cell: info => (
+          <div className="flex items-center space-x-2">
+            <Button
+              icon="edit"
+              variant="secondary"
+              onClick={() => editOrder(info.row.original._id)}
+            />
+            <Button
+              icon="delete"
+              variant="secondary"
+              onClick={() => setShowDeleteConfirm(info.row.original._id)}
+            />
+          </div>
         ),
       },
     ],
@@ -166,6 +215,44 @@ const OrderTable: FC<OrderTableProps> = ({ orders }): ReactElement => {
           ))}
         </tfoot>
       </table>
+      {deleteSuccess && (
+        <div className="fixed right-0 bottom-0 m-4 p-4 border-r-4 border-navy bg-white text-navy rounded-sm shadow-lg min-w-[300px] font-bold">
+          Order Successfully Deleted
+        </div>
+      )}
+      {showDeleteConfirm && (
+        <>
+          <button
+            onClick={() => setShowDeleteConfirm(undefined)}
+            className="fixed flex items-center justify-center p-4 bg-black/40 top-0 right-0 left-0 bottom-0"
+          ></button>
+          <div className="fixed flex items-center justify-center p-4 top-0 right-0 left-0 bottom-0 pointer-events-none ">
+            <div className="bg-white p-4 shadow-lg pointer-events-auto w-[90%] max-w-[600px] mx-auto text-center">
+              <div className="flex justify-end">
+                <Button
+                  icon="close"
+                  variant="secondary"
+                  onClick={() => setShowDeleteConfirm(undefined)}
+                />
+              </div>
+              <h1 className="font-semibold mt-6">
+                Are you sure you want to delete this order?
+              </h1>
+              <div className="flex justify-center items-center space-x-2 my-6">
+                <Button
+                  onClick={() => setShowDeleteConfirm(undefined)}
+                  variant="secondary"
+                >
+                  Nevermind
+                </Button>
+                <Button onClick={() => deleteOrder(showDeleteConfirm)}>
+                  Confirm Deletion
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

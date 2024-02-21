@@ -4,7 +4,7 @@ import { FC, ReactElement, ReactNode } from 'react'
 type ButtonProps = {
   variant?: 'primary' | 'secondary'
   onClick?: () => void
-  children: ReactNode
+  children?: ReactNode
   icon?: string
   className?: string
   iconPosition?: 'left' | 'right'
@@ -48,7 +48,8 @@ const Button: FC<ButtonProps> = ({
       type={type}
       onClick={onClick}
       className={[
-        `border-2 rounded-sm flex items-center font-semibold transition justify-center py-2 px-6`,
+        ` flex items-center font-semibold transition justify-center`,
+        !!children ? 'py-2 px-6 rounded-sm border-2' : 'p-1 rounded-lg border',
         variantClasses[variant].join(' '),
         sizeClass[size],
         iconPosition === 'right' ? '' : 'flex-row-reverse',
@@ -56,13 +57,14 @@ const Button: FC<ButtonProps> = ({
         disabled ? disabledVariantClasses[variant].join(' ') : '',
       ].join(' ')}
       disabled={disabled}
+      aria-label={!!children ? undefined : icon}
     >
       {children}
       {icon && (
         <span
           className={[
             'material-symbols-outlined',
-            iconPosition === 'right' ? 'ml-4' : 'mr-4',
+            !!children ? (iconPosition === 'right' ? 'ml-4' : 'mr-4') : '',
           ].join(' ')}
         >
           {icon}

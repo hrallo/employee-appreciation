@@ -5,6 +5,8 @@ import RadioGroup from '@/components/RadioGroup'
 import { getProductTitle } from '@/utils'
 import { FC, ReactElement, ReactNode, useState } from 'react'
 import { find } from 'lodash'
+import SizeRadio from '@/components/SizeRadio'
+import ColorRadio from '@/components/ColorRadio'
 
 type FormProps = {
   product: Product
@@ -19,19 +21,8 @@ const Form: FC<FormProps> = ({
   content,
   email,
 }): ReactElement => {
-  const optionsToArray = (options?: string) => {
-    if (!options) return
-    return options.split(',').map(opt => opt.trim())
-  }
-
-  const sizes = optionsToArray(product.acf.sizes)
-  const colors = optionsToArray(product.acf.colors)
-  const [selectedSize, setSelectedSize] = useState<string | undefined>(
-    sizes?.[0]
-  )
-  const [selectedColor, setSelectedColor] = useState<string | undefined>(
-    colors?.[0]
-  )
+  const [selectedSize, setSelectedSize] = useState<string>()
+  const [selectedColor, setSelectedColor] = useState<string>()
 
   const [isRemote, setIsRemote] = useState<boolean>(false)
   const [address, setAddress] = useState({
@@ -62,7 +53,6 @@ const Form: FC<FormProps> = ({
   )
 
   const selectedAddressDetails = find(locations, { id: selectedAddress })
-  const showSizeWrapper = (sizes && sizes.length > 0) || product.acf.size_guide
   const [error, setError] = useState<boolean>()
 
   const placeOrder = async () => {
@@ -125,14 +115,14 @@ const Form: FC<FormProps> = ({
           Would you like to place this order?
         </p>
 
-        {sizes && sizes?.length > 0 && (
+        {selectedSize && (
           <div className="mb-10">
             <div className="font-semibold ">Selected size:</div>
             <div>{selectedSize}</div>
           </div>
         )}
 
-        {colors && colors?.length > 0 && (
+        {selectedColor && (
           <div className="mb-10">
             <div className="font-semibold ">Selected color:</div>
             <div>{selectedColor}</div>
@@ -232,43 +222,29 @@ const Form: FC<FormProps> = ({
     <>
       {heading(getProductTitle(product))}
       <p className="text-sm md:text-base mb-10">{product.acf.description}</p>
-      {showSizeWrapper && (
-        <div className="mb-10">
-          <>
-            {sizes && sizes?.length > 0 && (
-              <RadioGroup
-                label="Select your size:"
-                name="Size"
-                choices={sizes.map(opt => {
-                  return { label: opt, value: opt }
-                })}
-                value={selectedSize}
-                onSetValue={setSelectedSize}
-              />
-            )}
-            {product.acf.size_guide && (
-              <img
-                src={product.acf.size_guide.sizes.large}
-                alt={product.acf.size_guide.alt}
-                className="mt-4"
-              />
-            )}
-          </>
-        </div>
-      )}
 
-      {colors && colors?.length > 0 && (
-        <RadioGroup
-          label="Select your color:"
-          name="Color"
-          choices={colors.map(opt => {
-            return { label: opt, value: opt }
-          })}
-          value={selectedColor}
-          onSetValue={setSelectedColor}
-          className="mb-10"
-        />
-      )}
+      <div className="mb-10">
+        <>
+          <ColorRadio
+            selectedColor={selectedColor}
+            colorString={product.acf.colors}
+            setSelectedColor={setSelectedColor}
+          />
+          <SizeRadio
+            selectedSize={selectedSize}
+            sizeString={product.acf.sizes}
+            setSelectedSize={setSelectedSize}
+          />
+          {product.acf.size_guide && (
+            <img
+              src={product.acf.size_guide.sizes.large}
+              alt={product.acf.size_guide.alt}
+              className="mt-4"
+            />
+          )}
+        </>
+      </div>
+
       <RadioGroup
         label="Are you a remote employee or work at a location not listed below?"
         name="Location"

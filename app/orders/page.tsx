@@ -1,9 +1,10 @@
 import Header from '@/components/Header'
 import { getSiteContent } from '../wordpress'
 import { cookies } from 'next/headers'
-import PasswordPromptDialog from './components/PasswordPromptDialog/PasswordPromptDialog'
-import OrderTable from './components/PasswordPromptDialog/OrderTable'
+import PasswordPromptDialog from './components/PasswordPromptDialog'
+import OrderTable from './components/OrderTable'
 import Csv from './components/CSV/Csv'
+import { useRouter } from 'next/navigation'
 
 async function getOrders(): Promise<{
   orders?: Order[]
@@ -26,12 +27,13 @@ async function getOrders(): Promise<{
   }
 }
 
-export default async function Home() {
+export default async function Orders() {
   const { content } = await getSiteContent()
 
   const cookiesStore = cookies()
   const loginCookies = cookiesStore.get(process.env.PASSWORD_COOKIE_NAME!)
   const isLoggedIn = !!loginCookies?.value
+
   if (!isLoggedIn) {
     return <PasswordPromptDialog />
   }

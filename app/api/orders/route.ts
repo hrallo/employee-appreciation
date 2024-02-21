@@ -1,5 +1,6 @@
 import connectDB from '@/lib/conntectDB'
 import order from '@/models/order'
+import { revalidateTag } from 'next/cache'
 
 const nodemailer = require('nodemailer')
 
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM, // sender address
-    to: body.receiverEmail, // list of receivers
+    to: `${body.receiverEmail}, ${process.env.EMAIL_FROM}`, // list of receivers
     subject: 'Employee Appreciation Order Received',
     html: confirmToUserHtml,
   })
@@ -103,11 +104,14 @@ export async function POST(request: Request) {
     html: confirmToBuisnessHtml,
   })
 
+  revalidateTag('orders')
+
   return Response.json({ newOrder })
 }
 
 export async function GET(request: Request) {
   await connectDB()
   const orders = await order.find()
+  revalidateTag('orders')
   return Response.json(orders)
 }

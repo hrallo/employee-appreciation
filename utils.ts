@@ -6,4 +6,9 @@ const decodeHtmlCharCodes = (str: string) =>
 const getProductTitle = (product?: Product) =>
   product?.title.rendered ? decodeHtmlCharCodes(product?.title.rendered) : ''
 
-export { getProductTitle, decodeHtmlCharCodes }
+const optionsToArray = (options?: string) => {
+  if (!options) return
+  return options.split(',').map(opt => opt.trim())
+}
+
+export { getProductTitle, decodeHtmlCharCodes, optionsToArray }

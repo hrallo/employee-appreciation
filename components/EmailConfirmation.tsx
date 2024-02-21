@@ -39,6 +39,9 @@ const EmailConfirmation: FC<EmailConfirmationProps> = ({
     return idx > -1 && email.slice(idx + 1) === companyDomain
   }
 
+  const isValidEmail = (email?: string) =>
+    email ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) : false
+
   const verifyEmail = async () => {
     setVerifyError(undefined)
 
@@ -83,6 +86,7 @@ const EmailConfirmation: FC<EmailConfirmationProps> = ({
           icon="arrow_forward"
           className="w-full sm:w-auto sm:mt-6"
           size="lg"
+          disabled={!isValidEmail(email)}
         >
           Continue
         </Button>

@@ -3,6 +3,7 @@ import ProductImages from './components/ProductImages'
 import ProductError from './components/error'
 import Form from './components/form.tsx/form'
 import { getLocations, getProduct, getSiteContent } from '../wordpress'
+import { revalidateTag } from 'next/cache'
 
 export default async function ProductDetail({
   searchParams,

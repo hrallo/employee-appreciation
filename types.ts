@@ -66,8 +66,10 @@ interface Content extends Post {
 }
 
 interface Order {
+  _id: string
   createdAt: Date
   product: string
+  productId: number
   receiverName: string
   receiverEmail: string
   size?: string
