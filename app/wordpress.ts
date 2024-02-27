@@ -63,8 +63,9 @@ async function getLocations(): Promise<{
   locationsError?: string
 }> {
   const res = await fetch(
-    `${process.env.WORDPRESS_URL}/location?per_page=12&acf_format=standard`
+    `${process.env.WORDPRESS_URL}/location?per_page=12&acf_format=standard`,
     // { next: { tags: ['locations'], revalidate: 300 } }
+    { next: { revalidate: 300 } }
   )
 
   if (!res.ok) {

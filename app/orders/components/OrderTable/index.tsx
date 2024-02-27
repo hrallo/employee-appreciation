@@ -11,7 +11,6 @@ import {
 import { decodeHtmlCharCodes } from '@/utils'
 import Button from '@/components/Button'
 import { useRouter } from 'next/navigation'
-import { revalidateTag } from 'next/cache'
 
 type OrderTableProps = {
   orders: Order[]
@@ -43,8 +42,7 @@ const OrderTable: FC<OrderTableProps> = ({ orders }): ReactElement => {
 
   useEffect(() => {
     if (!deleteSuccess) return
-
-    let timer = setTimeout(() => window?.location?.reload(), 3000)
+    let timer = setTimeout(() => window?.location?.reload(), 2000)
     return () => {
       clearTimeout(timer)
     }
