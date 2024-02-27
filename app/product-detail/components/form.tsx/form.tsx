@@ -194,7 +194,7 @@ const Form: FC<FormProps> = ({
                 : !selectedAddress
             }
           >
-            Confirm Order
+            {loading ? 'Placing Order...' : 'Confirm Order'}
           </Button>
         </div>
       </>
