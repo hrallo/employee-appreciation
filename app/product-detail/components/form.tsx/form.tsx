@@ -21,6 +21,7 @@ const Form: FC<FormProps> = ({
   content,
   email,
 }): ReactElement => {
+  const [loading, setLoading] = useState<boolean>()
   const [selectedSize, setSelectedSize] = useState<string>()
   const [selectedColor, setSelectedColor] = useState<string>()
 
@@ -56,6 +57,7 @@ const Form: FC<FormProps> = ({
   const [error, setError] = useState<boolean>()
 
   const placeOrder = async () => {
+    setLoading(true)
     try {
       await fetch('/api/orders', {
         method: 'POST',
@@ -92,8 +94,10 @@ const Form: FC<FormProps> = ({
       })
       setOrderPlaced(true)
       setShowConfirmOrder(false)
+      setLoading(false)
     } catch (err) {
       setError(true)
+      setLoading(false)
     }
   }
 
@@ -168,7 +172,7 @@ const Form: FC<FormProps> = ({
               setOrderPlaced(false)
             }}
             disabled={
-              isRemote
+              loading || isRemote
                 ? !address.line1 ||
                   !address.zipcode ||
                   !address.city ||
@@ -180,11 +184,9 @@ const Form: FC<FormProps> = ({
             Edit Order
           </Button>
           <Button
-            onClick={() => {
-              placeOrder()
-            }}
+            onClick={() => placeOrder()}
             disabled={
-              isRemote
+              loading || isRemote
                 ? !address.line1 ||
                   !address.zipcode ||
                   !address.city ||
@@ -355,7 +357,7 @@ const Form: FC<FormProps> = ({
         <Button
           onClick={() => confirmOrder()}
           disabled={
-            isRemote
+            loading || isRemote
               ? !address.name ||
                 !address.line1 ||
                 !address.zipcode ||
