@@ -7,7 +7,6 @@ export async function POST(request: Request, params: { slug: string }) {
   const cookie = serialize(process.env.PASSWORD_COOKIE_NAME!, 'true', {
     httpOnly: true,
     path: '/',
-    expires: new Date(new Date().getDate() + 30),
   })
 
   if (process.env.PAGE_PASSWORD !== password) {
