@@ -28,7 +28,10 @@ const ProductLinks: FC<ProductLinksProps> = ({
   return (
     <>
       <div className={['pb-4 md:py-10 px-6'].join(' ')}>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-[1200px] mx-auto">
+        <h2 className="text-center text-base md:text-xl font-bold">
+          The raffle for 2024 is closed. {"We'll"} see you next year!
+        </h2>
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-[1200px] mx-auto">
           {products.map((product, idx) => (
             <ProductButton
               key={idx}
@@ -42,7 +45,7 @@ const ProductLinks: FC<ProductLinksProps> = ({
               }}
             />
           ))}
-        </div>
+        </div> */}
       </div>
       {selectedProduct && (
         <EmailConfirmation

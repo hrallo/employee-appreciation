@@ -3,7 +3,6 @@ import ProductImages from './components/ProductImages'
 import ProductError from './components/error'
 import Form from './components/form.tsx/form'
 import { getLocations, getProduct, getSiteContent } from '../wordpress'
-import { revalidateTag } from 'next/cache'
 
 export default async function ProductDetail({
   searchParams,
@@ -14,6 +13,7 @@ export default async function ProductDetail({
   const { content } = await getSiteContent()
   const { product, error } = await getProduct(searchParams?.productId)
   const { locations, locationsError } = await getLocations()
+  const ended = true
 
   const pageHeader = (
     <Header
@@ -40,6 +40,14 @@ export default async function ProductDetail({
           message={'Please provide your company email to order this product.'}
         />
       </>
+    )
+  }
+
+  if (ended) {
+    return (
+      <h2 className="text-center text-base md:text-xl font-bold p-10">
+        The raffle for 2024 is closed. {"We'll"} see you next year!
+      </h2>
     )
   }
 
